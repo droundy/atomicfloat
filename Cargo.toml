@@ -2,6 +2,7 @@
 name = "atomicfloat"
 version = "0.1.0"
 authors = ["David Roundy <daveroundy@gmail.com>"]
+description = "Atomic float type"
 repository = "https://github.com/droundy/atomicfloat"
 edition = "2018"
 license = "Apache-2.0/MIT"
