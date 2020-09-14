@@ -4,7 +4,8 @@ pub use std::sync::atomic::Ordering;
 pub struct AtomicF64(AtomicU64);
 
 impl AtomicF64 {
-    /// FIXME should be const!
+    /// FIXME the constructor should be const, but cannot be made const until
+    /// `f64::to_bits` is made const.
     pub fn new(x: f64) -> Self {
         AtomicF64(AtomicU64::new(x.to_bits()))
     }
@@ -33,9 +34,9 @@ impl AtomicF64 {
             }
         }
     }
-    /// Subtracts from the current value, returning the previous value.  This operation
-    /// is *always* `Ordering::Relaxed`, and thus cannot be used to protect
-    /// other memory or coordinate between threads.
+    /// Subtracts from the current value, returning the previous value.  This
+    /// operation is *always* `Ordering::Relaxed`, and thus cannot be used to
+    /// protect other memory or coordinate between threads.
     pub fn fetch_sub(&self, val: f64) -> f64 {
         let mut old = self.load(Ordering::Relaxed);
         loop {
@@ -49,6 +50,9 @@ impl AtomicF64 {
         }
     }
 
+    /// Stores a value if the current value is the same as the `current`
+    /// argument.  See [std::sync::atomic::AtomicU64::compare_exchange_weak] for
+    /// details.
     pub fn compare_exchange_weak(
         &self,
         current: f64,
